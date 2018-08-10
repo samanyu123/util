@@ -1,6 +1,6 @@
 import os
 import speech_recognition as sr
-from convert_voice import recognize_speech_from_mic
+from convert_voice import get_the_voice_from_mic
 
 class SpeakToFeature(object):
 	"""Create the behave feature file based on the 
@@ -11,13 +11,13 @@ class SpeakToFeature(object):
 		self.microphone = sr.Microphone()
 	
 	def get_text(self):
-		return recognize_speech_from_mic(self.recognizer,self.microphone)["transcription"]
+		return get_the_voice_from_mic(self.recognizer,self.microphone)
 		
 	def create_feature_file(self):
 		print "What is your feature file name"
-		file_name = self.get_text().replace(" ","_")
+		file_name = self.get_text()
 		if file_name:
-			self.create_file(file_name)
+			self.create_file(file_name.replace(" ","_"))
 			
 	def create_file(self, file_name):
 		file_name+=".feature"
@@ -34,7 +34,7 @@ class SpeakToFeature(object):
 			self.write_feature_descp(feature_desc)
 			
 	def write_feature_descp(self, desc):
-		feature_desc = "Feature:" + desc.capitalize() + "\n"
+		feature_desc = "\nFeature:" + desc.capitalize() + "\n"
 		self.feature_fh.write(feature_desc)
 		
 	def sceanrio_description(self):
@@ -65,7 +65,7 @@ class SpeakToFeature(object):
 		
 	
 	def write_step_descp(self, decs):
-		desc = decs + "\n"
+		desc = decs.capitalize() + "\n"
 		self.feature_fh.write(desc)
 		
 	def create_scenario(self):
